@@ -1,0 +1,68 @@
+
+@function lighten($color, $percentage) {
+    @return mix(white, $color, $percentage);
+}
+
+@mixin table-variant($color-name, $color-value) {
+    .table-#{$color-name} {
+        --bs-table-bg: #{$color-value};
+        --bs-table-striped-bg: lighten($color-value, 40%);
+        --bs-table-hover-bg: lighten($color-value, 30%);
+        --bs-table-active-bg: lighten($color-value, 20%);
+        background-color: var(--bs-table-bg);
+
+        thead {
+            th {
+                background-color: var(--bs-table-bg);
+            }
+        }
+
+        tbody {
+            tr {
+                &:nth-of-type(odd) {
+                    background-color: var(--bs-table-striped-bg);
+                }
+                &:hover {
+                    background-color: var(--bs-table-hover-bg);
+                }
+                &.active {
+                    background-color: var(--bs-table-active-bg);
+                }
+            }
+        }
+    }
+}
+
+@each $color-name, $color-value in $theme-colors {
+    @include table-variant($color-name, $color-value);
+}
+
+@mixin breakpoint($break-point, $value) {
+    @media (min-width: $value) {
+        .table-#{$break-point} {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+
+            th,
+            td {
+                padding: 0.75rem;
+                vertical-align: top;
+                border-top: 1px solid #dee2e6;
+            }
+
+            thead th {
+                vertical-align: bottom;
+                border-bottom: 2px solid #dee2e6;
+            }
+
+            tbody + tbody {
+                border-top: 2px solid #dee2e6;
+            }
+        }
+    }
+}
+
+@each $break-point, $value in $break_points {
+    @include breakpoint($break-point, $value);
+}
